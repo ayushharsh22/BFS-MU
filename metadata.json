@@ -1,0 +1,6 @@
+{
+  "name": "Bharat Summer Fellowship Orientation Hub",
+  "description": "A premium, immersive, and highly interactive orientation dashboard for the Bharat Summer Fellowship 2026, hosted by Masters' Union.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
