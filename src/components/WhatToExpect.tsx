@@ -4,7 +4,7 @@ import { Milestone } from "lucide-react";
 export default function WhatToExpect() {
   const outcomes = [
     { stat: "10+ Cities", text: "Visited during intensive, cross-country travel cohorts" },
-    { stat: "20+ Immersions", text: "Hands-on business site audits completed" },
+    { stat: "20+ Immersions", text: "Hands-on business & cultural site exposures" },
     { stat: "6 Challenges", text: "One Day Challenges (ODC) solved under tight pressure" },
     { stat: "Boundless Bonds", text: "Forged life-long networks of elite startup minds" },
     { stat: "Content Portfolio", text: "Built personal leverage and documented your learning" },

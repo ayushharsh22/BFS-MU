@@ -16,7 +16,12 @@ const NAV_LINKS: NavLink[] = [
   { label: "Expectation", href: "#expect" },
 ];
 
-export default function Navbar() {
+interface NavbarProps {
+  currentView: "home" | "team";
+  onViewChange: (view: "home" | "team") => void;
+}
+
+export default function Navbar({ currentView, onViewChange }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -40,11 +45,28 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (id: string) => {
+  const handleLinkClick = (href: string) => {
     setMobileMenuOpen(false);
-    const element = document.querySelector(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+    
+    if (href === "team") {
+      onViewChange("team");
+      return;
+    }
+
+    if (currentView !== "home") {
+      onViewChange("home");
+      // Add a small delay to let the Home sections mount before scrolling
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 80);
+    } else {
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
@@ -63,7 +85,7 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between">
           {/* Logo Brand Group */}
-          <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => scrollToSection("#home")}>
+          <div className="flex items-center gap-2.5 cursor-pointer animate-fade-in" onClick={() => handleLinkClick("#home")}>
             {/* Custom abstract compass branding */}
             <div className="relative w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center glow-orange overflow-hidden">
               <Navigation2 className="w-4 h-4 text-white rotate-45 transform" />
@@ -83,18 +105,32 @@ export default function Navbar() {
             {NAV_LINKS.map((link) => (
               <button
                 key={link.label}
-                onClick={() => scrollToSection(link.href)}
-                className="font-mono text-[11px] uppercase tracking-wider text-zinc-400 hover:text-orange-500 transition-colors focus:outline-none"
+                onClick={() => handleLinkClick(link.href)}
+                className={`font-mono text-[11px] uppercase tracking-wider transition-colors focus:outline-none cursor-pointer ${
+                  currentView === "home" && link.href === "#home"
+                    ? "text-orange-500 font-semibold"
+                    : "text-zinc-400 hover:text-orange-500"
+                }`}
               >
                 {link.label}
               </button>
             ))}
+            <button
+              onClick={() => handleLinkClick("team")}
+              className={`px-3 py-1.5 rounded-lg font-mono text-[11px] uppercase tracking-wider transition-all focus:outline-none cursor-pointer ${
+                currentView === "team"
+                  ? "bg-orange-500 text-white font-bold shadow-glow-orange hover:bg-orange-600"
+                  : "bg-zinc-900 text-zinc-300 hover:text-white hover:bg-zinc-800 border border-zinc-800"
+              }`}
+            >
+              Meet The Team
+            </button>
           </nav>
 
           {/* Mobile hamburger button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-1.5 rounded-lg border border-zinc-800 text-zinc-300 hover:bg-zinc-900"
+            className="md:hidden p-1.5 rounded-lg border border-zinc-800 text-zinc-300 hover:bg-zinc-900 cursor-pointer"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -122,25 +158,38 @@ export default function Navbar() {
             {NAV_LINKS.map((link) => (
               <button
                 key={link.label}
-                onClick={() => scrollToSection(link.href)}
-                className="w-full text-left font-display text-2xl font-bold text-zinc-200 hover:text-orange-500 transition-colors py-1.5 border-b border-zinc-900/50"
+                onClick={() => handleLinkClick(link.href)}
+                className={`w-full text-left font-display text-2xl font-bold transition-colors py-1.5 border-b border-zinc-900/50 cursor-pointer ${
+                  currentView === "home" && link.href === "#home"
+                    ? "text-orange-500"
+                    : "text-zinc-200 hover:text-orange-500"
+                }`}
               >
                 {link.label}
               </button>
             ))}
+            <button
+              onClick={() => handleLinkClick("team")}
+              className={`w-full text-left font-display text-2xl font-black transition-colors py-1.5 border-b border-zinc-900/50 flex items-center justify-between cursor-pointer ${
+                currentView === "team" ? "text-orange-500" : "text-orange-400 hover:text-orange-500"
+              }`}
+            >
+              <span>MEET THE TEAM</span>
+              <span className="text-[10px] bg-orange-500/10 text-orange-500 px-2 py-0.5 rounded font-mono font-medium">NEW</span>
+            </button>
           </div>
         </div>
 
         <div className="flex flex-col gap-4 mt-8 pt-6 border-t border-zinc-900">
           <button
-            onClick={() => scrollToSection("#hotel")}
-            className="w-full py-2 rounded-xl bg-zinc-900 text-zinc-300 font-mono text-xs uppercase tracking-wider text-center border border-zinc-800"
+            onClick={() => handleLinkClick("#hotel")}
+            className="w-full py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 font-mono text-xs uppercase tracking-wider text-center border border-zinc-800 cursor-pointer"
           >
             ALDOTT HOTEL COORDINATES
           </button>
           <button
-            onClick={() => scrollToSection("#schedule")}
-            className="w-full py-2 rounded-xl bg-orange-500 text-white font-mono text-xs uppercase tracking-wider font-bold text-center shadow-glow-orange"
+            onClick={() => handleLinkClick("#schedule")}
+            className="w-full py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-mono text-xs uppercase tracking-wider font-bold text-center shadow-glow-orange cursor-pointer"
           >
             LIVE TIMETABLE
           </button>

@@ -10,8 +10,10 @@ import ResourcesSection from "./components/ResourcesSection";
 import HotelSection from "./components/HotelSection";
 import CountdownTimer from "./components/CountdownTimer";
 import WhyThisIsDifferent from "./components/WhyThisIsDifferent";
+import MeetTheTeam from "./components/MeetTheTeam";
 
 export default function App() {
+  const [currentView, setCurrentView] = React.useState<"home" | "team">("home");
   
   const handleScrollToCountdown = () => {
     const element = document.querySelector("#countdown");
@@ -30,9 +32,13 @@ export default function App() {
   return (
     <div className="bg-black text-white font-sans selection:bg-orange-500 selection:text-white overflow-x-hidden">
       {/* Floating Header & Navigation progress bar */}
-      <Navbar />
+      <Navbar currentView={currentView} onViewChange={setCurrentView} />
 
-      {/* SECTION 1: HERO SECTION */}
+      {currentView === "team" ? (
+        <MeetTheTeam onBack={() => setCurrentView("home")} />
+      ) : (
+        <>
+          {/* SECTION 1: HERO SECTION */}
       <section id="home" className="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-4 md:px-8 overflow-hidden bg-black">
         {/* Animated grid matrix & glowing background spotlights */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a0d_1px,transparent_1px),linear-gradient(to_bottom,#0f172a0d_1px,transparent_1px)] bg-[size:3.5rem_3.5rem]" />
@@ -247,6 +253,8 @@ export default function App() {
           </div>
         </div>
       </section>
+        </>
+      )}
 
       {/* METRIC FOOTER BRANDING */}
       <footer className="py-12 px-4 md:px-8 border-t border-zinc-900 bg-zinc-950">
@@ -257,7 +265,7 @@ export default function App() {
                 <Navigation2 className="w-3.5 h-3.5 text-white rotate-45" />
               </div>
               <span className="font-display font-black text-sm tracking-widest text-white uppercase">
-                BHARAT SUMMER FELLOWSHIP
+                BHARAT SUMMER FELLOWSHIP | DISCOVER YOURSELF
               </span>
             </div>
           </div>

@@ -1,7 +1,26 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ORIENTATION_SCHEDULE } from "../data";
-import { Calendar, MapPin, Clock, User, Sparkles, ChevronRight, BookOpen, Coffee, Award } from "lucide-react";
+import { Calendar, MapPin, Clock, User, Sparkles, ChevronRight, BookOpen, Coffee, Award, Linkedin } from "lucide-react";
+
+const LINKEDIN_MAP: Record<string, string> = {
+  "shikhar mahajan": "https://www.linkedin.com/in/shikhar-mahajan-iiml/",
+  "abhishek jhanwar": "https://www.linkedin.com/in/abhishek-jhanwar-a612651a1/",
+  "ayush harsh": "https://www.linkedin.com/in/ayush-harsh/",
+  "shahrukh moin khan": "https://www.linkedin.com/in/shahrukhmoinkhan/",
+  "sayyed mohd. salman": "https://www.linkedin.com/in/sayyed-mohammad-salman-5b68661b2/",
+  "sumit vijapure": "https://www.linkedin.com/in/sumit-vijapure/",
+  "divyam goenka": "https://www.linkedin.com/in/divyamamitgoenka/",
+  "smita tandon": "https://www.linkedin.com/in/smita-tandon/",
+  "satyam anand": "https://www.linkedin.com/in/satyam-anand-48a319161/",
+  "shantanu prakash": "https://www.linkedin.com/in/shantanu-prakash-9604755/",
+  "dr. nandini seth": "https://www.linkedin.com/in/nandini-seth-iimb/",
+  "nandini seth": "https://www.linkedin.com/in/nandini-seth-iimb/",
+  "devansh kotak": "https://www.linkedin.com/in/devansh-kotak-988465290/",
+  "dr. gopika kumar": "https://www.linkedin.com/in/drgopikakumar/",
+  "dr. abhishek vashishth": "https://www.linkedin.com/in/abhishek-vashishth-8708946b/",
+  "abhishek vashishth": "https://www.linkedin.com/in/abhishek-vashishth-8708946b/"
+};
 
 export default function TimelineSection() {
   const [activeDay, setActiveDay] = useState<number>(1);
@@ -155,9 +174,51 @@ export default function TimelineSection() {
 
                         {/* Speaker Indicator */}
                         {session.host && (
-                          <div className="mt-3 flex items-center gap-1.5 font-mono text-[11px] text-zinc-400 bg-zinc-900/30 py-1 px-2.5 rounded-md border border-zinc-800/40 inline-flex">
-                            <User className="w-3 h-3 text-orange-500" />
-                            <span>HOSTED BY: <strong className="text-zinc-200">{session.host}</strong></span>
+                          <div className="mt-3 flex items-center flex-wrap gap-2 font-mono text-[11px] text-zinc-400 bg-zinc-900/30 py-1.5 px-3 rounded-md border border-zinc-800/40 inline-flex">
+                            <div className="flex items-center gap-1.5">
+                              <User className="w-3 h-3 text-orange-500" />
+                              <span>HOSTED BY: <strong className="text-zinc-200">{session.host}</strong></span>
+                            </div>
+                            {(() => {
+                              const hostLower = session.host.toLowerCase();
+                              // Find all matched keys in our LINKEDIN_MAP
+                              const matchedKeys = Object.keys(LINKEDIN_MAP).filter(key => hostLower.includes(key));
+                              
+                              // Deduplicate sub-matches, e.g. "nandini seth" vs "dr. nandini seth"
+                              matchedKeys.sort((a, b) => b.length - a.length);
+                              const finalKeys: string[] = [];
+                              for (const key of matchedKeys) {
+                                if (!finalKeys.some(fk => fk.includes(key))) {
+                                  finalKeys.push(key);
+                                }
+                              }
+
+                              if (finalKeys.length > 0) {
+                                return (
+                                  <div className="flex items-center gap-1.5 pl-2 border-l border-zinc-800/80 ml-1">
+                                    {finalKeys.map(key => {
+                                      const url = LINKEDIN_MAP[key];
+                                      // Get a pretty label
+                                      const rawWords = key.replace("dr.", "Dr.").split(" ");
+                                      const nameLabel = rawWords.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+                                      return (
+                                        <a
+                                          key={key}
+                                          href={url}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="flex items-center justify-center p-1 rounded bg-[#0077b5]/10 border border-[#0077b5]/30 hover:border-[#0077b5]/60 hover:bg-[#0077b5]/20 text-[#00a0dc] transition-all self-center text-[10px] font-bold"
+                                          title={`Connect with ${nameLabel} on LinkedIn`}
+                                        >
+                                          <Linkedin className="w-3 h-3" />
+                                        </a>
+                                      );
+                                    })}
+                                  </div>
+                                );
+                              }
+                              return null;
+                            })()}
                           </div>
                         )}
                       </div>
