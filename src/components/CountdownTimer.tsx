@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Clock, Calendar, ShieldAlert } from "lucide-react";
 
 export default function CountdownTimer() {
-  const targetDate = new Date("2026-06-01T00:00:00");
+  const targetDate = new Date("2026-06-01T09:15:00+05:30");
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -57,7 +57,7 @@ export default function CountdownTimer() {
           T-Minus Until Bharat Begins
         </h3>
         <p className="text-zinc-500 font-mono text-[11px] uppercase tracking-wider mb-8">
-          TARGET_LAUNCH: 01_JUNE_2026 // TIMEZONE: IST (GMT+5:30)
+          TARGET_LAUNCH: 01_JUNE_2026 @ 09:15 AM // TIMEZONE: IST (GMT+5:30)
         </p>
 
         {timeLeft.isOver ? (
